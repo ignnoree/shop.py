@@ -119,7 +119,7 @@ def delete_order():
     if field_error:
         return field_error
 
-    tshirt_number = data["tshirt_number"]             #jasem chejoori mikhad etelaato bezane ??????????  # faghat shomare user ba etelaate tshirt ? 
+    tshirt_number = data["tshirt_number"]           
     tshirt_name = data["tshirt_name"] 
 
     try:

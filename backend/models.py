@@ -54,8 +54,8 @@ CREATE TABLE IF NOT EXISTS admins (
 
     user_exists = db.execute("SELECT * FROM users WHERE phone_number = '09192232099'")
     if not user_exists:
-        db.execute("insert into users (name,last_name,phone_number) VALUES ('amirali','eslami','09192232099')")
-        db.execute("insert into admins (user_id,phone_number) VALUES ('1','09192232099')")
+        db.execute("insert into users (name,last_name,phone_number) VALUES ('')")
+        db.execute("insert into admins (user_id,phone_number) VALUES ()")
 
 
 

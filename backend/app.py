@@ -8,13 +8,13 @@ from dotenv import load_dotenv
 import os
 from config import Config
 from flask_recaptcha import ReCaptcha
-from threading import Thread
-from celery_conf import cleanup_expired_codes
 from flask_cors import CORS
+from celery_app import celery  # Import celery from the celery_app.py
+from celery_app import cleanup_expired_codes
+import time
 
 UPLOAD_FOLDER = Config.UPLOAD_FOLDER
 STATIC_URL_PATH = '/static/photos'
-
 
 load_dotenv()
 app_secret_key = os.getenv("APP_SECRET_KEY")
@@ -29,7 +29,6 @@ app.config['RECAPTCHA_PUBLIC_KEY'] = os.getenv("RECAPTCHA_PUBLIC_KEY")
 app.config['RECAPTCHA_PRIVATE_KEY'] = os.getenv("RECAPTCHA_PRIVATE_KEY")
 recaptcha = ReCaptcha(app)
 
-
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['CACHE_KEY_PREFIX'] = 'myapp_'
 app.config['SECRET_KEY'] = app_secret_key
@@ -40,11 +39,9 @@ app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=15)
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s', filename='app.log', filemode="w")
 jwt = JWTManager(app)
 
-
 CORS(app, origins=["http://localhost:3000"])
 
 create_tables()
-
 
 app.register_blueprint(admin_routes)
 app.register_blueprint(auth_routes)
@@ -54,16 +51,5 @@ app.register_blueprint(tshirts_routes)
 
 
 
-def start_scheduler():
-    thread = Thread(target=cleanup_expired_codes)
-    thread.daemon = True 
-    thread.start()
-
-
-
-
-
-
 if __name__ == "__main__":
-    start_scheduler()
     app.run(debug=True)
